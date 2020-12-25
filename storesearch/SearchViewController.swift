@@ -8,7 +8,6 @@
 import UIKit
 
 class SearchViewController: UIViewController {
-    
     //MARK: - Ins Vars
         //
     @IBOutlet weak var searchBar: UISearchBar!
@@ -25,6 +24,17 @@ class SearchViewController: UIViewController {
         self.tableView.contentInset = UIEdgeInsets(top: 50, left: 0, bottom: 0, right: 0)
         self.searchBar.backgroundColor = UIColor.blue // 경계선, 배경까지 변형
         // delegate search bar  - done in SB
+        var cellNib = UINib(nibName: TableView.CellIdentifier.searchResultCell, bundle: nil)
+        tableView.register(cellNib, forCellReuseIdentifier: TableView.CellIdentifier.searchResultCell)
+        cellNib = UINib(nibName: TableView.CellIdentifier.nothingFoundCell, bundle: nil)
+        tableView.register(cellNib, forCellReuseIdentifier: TableView.CellIdentifier.nothingFoundCell)
+        //
+        
+        
+        //
+        
+        
+        //
     }
 }
 
@@ -32,9 +42,7 @@ class SearchViewController: UIViewController {
 extension SearchViewController : UISearchBarDelegate {
     // 1.
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        //
         hasSearched = true
-        //
         searchBar.resignFirstResponder()
         searchResults = [ ]
         //
@@ -55,6 +63,14 @@ extension SearchViewController : UISearchBarDelegate {
         return .topAttached
         // allowing their background content to show through the status bar
     }
+    //MARK: - Symbolic Name vs. Actual Value
+    struct TableView {
+        struct CellIdentifier {
+            // struct constant -> search result cell
+            static let searchResultCell = "SearchResultCell"
+            static let nothingFoundCell = "NothingFoundCell"
+        }
+    }
     //
 }
 
@@ -73,26 +89,23 @@ extension SearchViewController : UISearchBarDelegate {
     }
         // 2.
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cellID = "SearchResultCell"
-        var cell : UITableViewCell! = self.tableView.dequeueReusableCell( withIdentifier: cellID )
-        // using the class or nib file you previously registered, If not return nil
-        if cell == nil {
-            cell = UITableViewCell(style: .subtitle, reuseIdentifier: cellID )
-        }
         //
         if searchResults.count == 0 {
-            cell.textLabel!.text = "(Nothing Found)"
-            cell.textLabel?.textColor = .lightGray
-            cell.detailTextLabel!.text = ""
+            return tableView.dequeueReusableCell(withIdentifier: TableView.CellIdentifier.nothingFoundCell, for: indexPath)
+        }
+        else
+        {
+            let cellID = TableView.CellIdentifier.searchResultCell
+            let cell = tableView.dequeueReusableCell( withIdentifier: cellID, for : indexPath ) as! SearchResultCell
+            //
+            let searchResult = searchResults[indexPath.row]
+            cell.nameLabel.text = searchResult.name
+            cell.artistNameLabel.text = searchResult.artistName
+            //
             return cell
         }
-        let searchResult = searchResults[indexPath.row]
-        cell.textLabel!.text = searchResult.name
-        cell.textLabel?.textColor = .black
-        cell.detailTextLabel!.text = searchResult.artistName
-        //
-        return cell
     }
+        
         //
         func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
             if hasSearched == false || searchResults.count == 0 {
