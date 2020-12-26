@@ -21,6 +21,8 @@ class SearchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         //
+        searchBar.becomeFirstResponder()
+        //
         self.tableView.contentInset = UIEdgeInsets(top: 50, left: 0, bottom: 0, right: 0)
         self.searchBar.backgroundColor = UIColor.blue // 경계선, 배경까지 변형
         // delegate search bar  - done in SB
@@ -28,12 +30,6 @@ class SearchViewController: UIViewController {
         tableView.register(cellNib, forCellReuseIdentifier: TableView.CellIdentifier.searchResultCell)
         cellNib = UINib(nibName: TableView.CellIdentifier.nothingFoundCell, bundle: nil)
         tableView.register(cellNib, forCellReuseIdentifier: TableView.CellIdentifier.nothingFoundCell)
-        //
-        
-        
-        //
-        
-        
         //
     }
 }
