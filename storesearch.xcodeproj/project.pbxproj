@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		1C5EE35F259645E800AD4AE5 /* NothingFoundCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1C5EE35E259645E800AD4AE5 /* NothingFoundCell.xib */; };
+		1CB761EC259B2409003F1FF6 /* LoadingCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1CB761EB259B2409003F1FF6 /* LoadingCell.xib */; };
 		1CC7BAC32594A7B600887E65 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC7BAC22594A7B600887E65 /* AppDelegate.swift */; };
 		1CC7BAC52594A7B600887E65 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC7BAC42594A7B600887E65 /* SceneDelegate.swift */; };
 		1CC7BAC72594A7B600887E65 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC7BAC62594A7B600887E65 /* SearchViewController.swift */; };
@@ -21,6 +22,7 @@
 
 /* Begin PBXFileReference section */
 		1C5EE35E259645E800AD4AE5 /* NothingFoundCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NothingFoundCell.xib; sourceTree = "<group>"; };
+		1CB761EB259B2409003F1FF6 /* LoadingCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LoadingCell.xib; sourceTree = "<group>"; };
 		1CC7BABF2594A7B600887E65 /* storesearch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = storesearch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1CC7BAC22594A7B600887E65 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1CC7BAC42594A7B600887E65 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -103,6 +105,7 @@
 				1C5728B8259A1B9C00A851C7 /* DataModel */,
 				1CD427CD259604D700C407EF /* SearchResultCell.xib */,
 				1C5EE35E259645E800AD4AE5 /* NothingFoundCell.xib */,
+				1CB761EB259B2409003F1FF6 /* LoadingCell.xib */,
 				1CC7BAC82594A7B600887E65 /* Main.storyboard */,
 				1CC7BACB2594A7BB00887E65 /* Assets.xcassets */,
 				1CC7BACD2594A7BB00887E65 /* LaunchScreen.storyboard */,
@@ -170,6 +173,7 @@
 			files = (
 				1CC7BACF2594A7BB00887E65 /* LaunchScreen.storyboard in Resources */,
 				1CC7BACC2594A7BB00887E65 /* Assets.xcassets in Resources */,
+				1CB761EC259B2409003F1FF6 /* LoadingCell.xib in Resources */,
 				1CD427CE259604D700C407EF /* SearchResultCell.xib in Resources */,
 				1C5EE35F259645E800AD4AE5 /* NothingFoundCell.xib in Resources */,
 				1CC7BACA2594A7B600887E65 /* Main.storyboard in Resources */,

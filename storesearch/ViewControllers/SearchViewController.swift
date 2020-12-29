@@ -15,6 +15,7 @@ class SearchViewController: UIViewController {
         //
     var searchResults = [SearchResult]()
     var hasSearched = false
+    var isLoading = false
         //
     //MARK: - Helper Data Structure
     struct TableView {
@@ -22,6 +23,8 @@ class SearchViewController: UIViewController {
             // struct constant -> search result cell
             static let searchResultCell = "SearchResultCell"
             static let nothingFoundCell = "NothingFoundCell"
+            //MARK:-Loading Indicatior View
+            static let loadingCell = "LoadingCell"
         }
     }
     
@@ -36,6 +39,10 @@ class SearchViewController: UIViewController {
         tableView.register(cellNib, forCellReuseIdentifier: TableView.CellIdentifier.searchResultCell)
         cellNib = UINib(nibName: TableView.CellIdentifier.nothingFoundCell, bundle: nil)
         tableView.register(cellNib, forCellReuseIdentifier: TableView.CellIdentifier.nothingFoundCell)
+        //
+        cellNib = UINib(nibName: TableView.CellIdentifier.loadingCell, bundle: nil)
+        tableView.register(cellNib, forCellReuseIdentifier: TableView.CellIdentifier.loadingCell)
+        //
     }
 }
 
@@ -47,18 +54,42 @@ extension SearchViewController : UISearchBarDelegate {
         if !self.searchBar.text!.isEmpty {
             //
             searchBar.resignFirstResponder()
-            //
+            //MARK: - Configure - loading status
+            isLoading = true
+            tableView.reloadData()
             hasSearched = true
+            // MARK: - Query is made here !!
             searchResults = []
-            //
-            let url = iTunesURL( searchText: searchBar.text! )
-            if let data = performStoreRequest(with :url){
-                searchResults = parse(data: data)
-                searchResults.sort( by:  > )
+           
+            //MARK: - Dispatch to Background Queue : let GCD handle the rest
+            let url = self.iTunesURL( searchText: searchBar.text! )
+            let queue = DispatchQueue.global() // global queue에 대한 레퍼런스, 직접 만들 수도 있으나, 시스템이 주는
+            // 표준형 큐를 쓰는 걸로 충분함
+            // 시스템이 준 표준 글로벌 큐에, 클로저에 정의된 작업을, asynchronously 실행, 동시 진행한다,
+            // 메인 쓰레드는 이거 글로벌큐에 던져주고 자기는 다시 할 거 하러감, 클로저 실행 안함 !!
+//            let url = iTunesURL( searchText: searchBar.text! )
+            //MARK: -
+            queue.async {
+                    
+                //MARK:- make closure(block) give it to background(global) queue
+                if let data = self.performStoreRequest(with :url){
+                    self.searchResults = self.parse(data: data)
+                    self.searchResults.sort( by:  > )
+                    print("I'm background thread. Networking Done!")
+                    
+                    //MARK - Schedule a block to main queue and back its flow
+                    DispatchQueue.main.async{
+                        print("Back to main thread. executing TableView UI Update")
+                        self.isLoading = false
+                        self.tableView.reloadData()
+                    }
+                }
+                //
             }
-            self.tableView.reloadData()
+//            // MARK:- Reflect Search Results
+//            isLoading = false
+//            self.tableView.reloadData()
         }
-        //
     }
     
     // 2. SearchBarDelegate : UIBarPositioning(protocol)
@@ -70,7 +101,7 @@ extension SearchViewController : UISearchBarDelegate {
     func iTunesURL(searchText : String) -> URL {
         let encodeText = searchText.addingPercentEncoding( withAllowedCharacters: CharacterSet.urlQueryAllowed )!
         let urlString = String(
-            format : "https://itunes.apple.com/search?term=%@",  // "https://itunes.apple.com/search?term=%@"
+            format : "https://itunes.apple.com/search?term=%@&limit=200",
             encodeText
         )
             let url = URL(string: urlString)
@@ -117,6 +148,9 @@ extension SearchViewController : UISearchBarDelegate {
     // MARK: - DataSource
         // 1.
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        guard !isLoading else{
+            return 1
+        }
         guard hasSearched == true else {
             return 0
         }
@@ -127,6 +161,14 @@ extension SearchViewController : UISearchBarDelegate {
     }
         // 2.
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        //
+        guard !isLoading else {
+            let cell = tableView.dequeueReusableCell( withIdentifier: TableView.CellIdentifier.loadingCell, for: indexPath )
+            let spinner = cell.viewWithTag(100) as! UIActivityIndicatorView
+            spinner.startAnimating()
+            return cell
+        }
+        //
         if searchResults.count == 0 {
             return tableView.dequeueReusableCell(withIdentifier: TableView.CellIdentifier.nothingFoundCell, for: indexPath)
         }
@@ -149,7 +191,7 @@ extension SearchViewController : UISearchBarDelegate {
         }
          // 3).
         func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
-            if hasSearched == false || searchResults.count == 0 {
+            if searchResults.count == 0 || isLoading == true{
                 return nil
             }
             else {
