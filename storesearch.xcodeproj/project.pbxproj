@@ -45,6 +45,39 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1C5728B8259A1B9C00A851C7 /* DataModel */ = {
+			isa = PBXGroup;
+			children = (
+				1CD427C92595E0E000C407EF /* SearchResult.swift */,
+			);
+			path = DataModel;
+			sourceTree = "<group>";
+		};
+		1C5728B9259A1BC700A851C7 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				1CC7BAC62594A7B600887E65 /* SearchViewController.swift */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		1C5728BA259A1BEC00A851C7 /* BasicResources */ = {
+			isa = PBXGroup;
+			children = (
+				1CC7BAC22594A7B600887E65 /* AppDelegate.swift */,
+				1CC7BAC42594A7B600887E65 /* SceneDelegate.swift */,
+			);
+			path = BasicResources;
+			sourceTree = "<group>";
+		};
+		1C5728BB259A1C0400A851C7 /* UIModels */ = {
+			isa = PBXGroup;
+			children = (
+				1CFDB7092596160A001DD27A /* SearchResultCell.swift */,
+			);
+			path = UIModels;
+			sourceTree = "<group>";
+		};
 		1CC7BAB62594A7B600887E65 = {
 			isa = PBXGroup;
 			children = (
@@ -64,11 +97,10 @@
 		1CC7BAC12594A7B600887E65 /* storesearch */ = {
 			isa = PBXGroup;
 			children = (
-				1CC7BAC22594A7B600887E65 /* AppDelegate.swift */,
-				1CC7BAC42594A7B600887E65 /* SceneDelegate.swift */,
-				1CC7BAC62594A7B600887E65 /* SearchViewController.swift */,
-				1CD427C92595E0E000C407EF /* SearchResult.swift */,
-				1CFDB7092596160A001DD27A /* SearchResultCell.swift */,
+				1C5728BB259A1C0400A851C7 /* UIModels */,
+				1C5728BA259A1BEC00A851C7 /* BasicResources */,
+				1C5728B9259A1BC700A851C7 /* ViewControllers */,
+				1C5728B8259A1B9C00A851C7 /* DataModel */,
 				1CD427CD259604D700C407EF /* SearchResultCell.xib */,
 				1C5EE35E259645E800AD4AE5 /* NothingFoundCell.xib */,
 				1CC7BAC82594A7B600887E65 /* Main.storyboard */,
