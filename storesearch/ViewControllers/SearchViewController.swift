@@ -70,20 +70,10 @@ extension SearchViewController : UISearchBarDelegate {
 //            let url = iTunesURL( searchText: searchBar.text! )
             //MARK: -
             queue.async {
-                    
-                //MARK:- make closure(block) give it to background(global) queue
-                if let data = self.performStoreRequest(with :url){
-                    self.searchResults = self.parse(data: data)
-                    self.searchResults.sort( by:  > )
-                    print("I'm background thread. Networking Done!")
-                    
-                    //MARK - Schedule a block to main queue and back its flow
-                    DispatchQueue.main.async{
-                        print("Back to main thread. executing TableView UI Update")
-                        self.isLoading = false
-                        self.tableView.reloadData()
-                    }
-                }
+                    //MARK: - New Networking Block
+                
+                
+                
                 //
             }
 //            // MARK:- Reflect Search Results
