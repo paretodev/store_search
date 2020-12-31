@@ -16,7 +16,8 @@ class SearchViewController: UIViewController {
     var searchResults = [SearchResult]()
     var hasSearched = false
     var isLoading = false
-        //
+    var dataTask : URLSessionTask?
+    
     //MARK: - Helper Data Structure
     struct TableView {
         struct CellIdentifier {
@@ -52,8 +53,9 @@ extension SearchViewController : UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         if !self.searchBar.text!.isEmpty {
             searchBar.resignFirstResponder()
-            
             //MARK: - Configure - loading status
+            dataTask?.cancel()
+            // MARK:- Cancel the "active data task"
             isLoading = true
             tableView.reloadData()
             hasSearched = true
@@ -61,11 +63,12 @@ extension SearchViewController : UISearchBarDelegate {
             //MARK: - Dispatch to Background Queue : let GCD handle the rest
             let url = self.iTunesURL( searchText: searchBar.text! )
             let session = URLSession.shared
-            let dataTask = session.dataTask(with: url){ data,response, error in
-                                                                                    // Data?, URLResponse?, Error?
+            //
+            dataTask = session.dataTask(with: url){ data,response, error in
+                                                                            // Data?, URLResponse?, Error?
                 checkOnMain()
-                if let error = error {
-                    print("Failure : \(error.localizedDescription)")
+                if let error = error as NSError?, error.code == -999 {
+                    return
                 }
                 // URLResponse -> HTTPURLResponse : URLResponse to access status code
                 else if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 {
@@ -97,7 +100,8 @@ extension SearchViewController : UISearchBarDelegate {
                 }
                 //MARK:- End of completion handler
             }
-            dataTask.resume()
+            
+            dataTask?.resume()
         }
         //MARK:- End of searchBarButtonClicked( )
     }
@@ -118,17 +122,7 @@ extension SearchViewController : UISearchBarDelegate {
             let url = URL(string: urlString)
             return url!
         }
-    //
-    func performStoreRequest(with url : URL) -> Data?{
-        do {
-            return try Data(contentsOf: url)
-                // no network connection
-                // no server at specified url
-        } catch {
-            self.showNetworkError() // bad network -> users side
-            return nil
-        }
-    }
+    
     //
     func parse(data: Data) -> [SearchResult] {
         do {
