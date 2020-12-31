@@ -48,38 +48,58 @@ class SearchViewController: UIViewController {
 
 //MARK: - Search Bar Delegate
 extension SearchViewController : UISearchBarDelegate {
-    // 1.
+    //
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        //
         if !self.searchBar.text!.isEmpty {
-            //
             searchBar.resignFirstResponder()
+            
             //MARK: - Configure - loading status
             isLoading = true
             tableView.reloadData()
             hasSearched = true
-            // MARK: - Query is made here !!
             searchResults = []
-           
             //MARK: - Dispatch to Background Queue : let GCD handle the rest
             let url = self.iTunesURL( searchText: searchBar.text! )
-            let queue = DispatchQueue.global() // global queue에 대한 레퍼런스, 직접 만들 수도 있으나, 시스템이 주는
-            // 표준형 큐를 쓰는 걸로 충분함
-            // 시스템이 준 표준 글로벌 큐에, 클로저에 정의된 작업을, asynchronously 실행, 동시 진행한다,
-            // 메인 쓰레드는 이거 글로벌큐에 던져주고 자기는 다시 할 거 하러감, 클로저 실행 안함 !!
-//            let url = iTunesURL( searchText: searchBar.text! )
-            //MARK: -
-            queue.async {
-                    //MARK: - New Networking Block
-                
-                
-                
-                //
+            let session = URLSession.shared
+            let dataTask = session.dataTask(with: url){ data,response, error in
+                                                                                    // Data?, URLResponse?, Error?
+                checkOnMain()
+                if let error = error {
+                    print("Failure : \(error.localizedDescription)")
+                }
+                // URLResponse -> HTTPURLResponse : URLResponse to access status code
+                else if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 {
+                        print("Request accepted!! data : \(data!)")
+                    //MARK: - MARK:- Reflect the fetched data
+                    if let data = data {
+                        self.searchResults = self.parse(data: data)
+                        self.searchResults.sort( by: < ) // dictionary order
+                        DispatchQueue.main.async {
+                            checkOnMain()
+                            self.isLoading = false
+                            self.tableView.reloadData()
+                        }
+                        return
+                    }
+                }
+                else { // If error is nil !!
+                    print("Failure in Networking \(response!)")
+                }
+                // MARK:- Unsuccessful networking
+                DispatchQueue.main.async {
+                    //MARK:- Non heavy. Okay to do on main thread
+                    checkOnMain()
+                    self.hasSearched = false
+                    self.isLoading = false
+                    // stop the indicator and show alert
+                    self.tableView.reloadData()
+                    self.showNetworkError()
+                }
+                //MARK:- End of completion handler
             }
-//            // MARK:- Reflect Search Results
-//            isLoading = false
-//            self.tableView.reloadData()
+            dataTask.resume()
         }
+        //MARK:- End of searchBarButtonClicked( )
     }
     
     // 2. SearchBarDelegate : UIBarPositioning(protocol)
@@ -91,6 +111,7 @@ extension SearchViewController : UISearchBarDelegate {
     func iTunesURL(searchText : String) -> URL {
         let encodeText = searchText.addingPercentEncoding( withAllowedCharacters: CharacterSet.urlQueryAllowed )!
         let urlString = String(
+            //MARK:- itunes API Endpoint
             format : "https://itunes.apple.com/search?term=%@&limit=200",
             encodeText
         )
@@ -127,7 +148,6 @@ extension SearchViewController : UISearchBarDelegate {
         alert.addAction(action)
         //
         present(alert, animated: true, completion: nil)
-        //
     }
 
     //MARK:- End of VC.
