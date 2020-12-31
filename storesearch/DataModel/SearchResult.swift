@@ -23,8 +23,10 @@ class SearchResult : Codable, CustomStringConvertible{
     }
     var trackPrice : Double? = 0.0
     var currency : String?  = ""
+    //
     var imageSmall = ""
     var imageLarge = ""
+    //
     // MARK: - New Properties
     var trackViewUrl : String?
     var collectionName : String?

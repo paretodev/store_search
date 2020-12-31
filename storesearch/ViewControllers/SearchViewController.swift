@@ -208,16 +208,11 @@ extension SearchViewController : UISearchBarDelegate {
             //
             let searchResult = searchResults[indexPath.row] // +1에 해당하는 셀에 대한 데이터 요구
             //MARK:- Label Configure
-            cell.nameLabel.text = searchResult.name
-            if searchResult.artist.isEmpty {
-                cell.artistNameLabel.text  = "Unknown"
-            }else {
-                cell.artistNameLabel.text = String( format: "%@ (%@)", searchResult.artist, searchResult.type )
-            }
+            cell.configure(for: searchResult)
             return cell
             }
-        //
         }
+        
          // 3).
         func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
             if searchResults.count == 0 || isLoading == true{
