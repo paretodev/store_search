@@ -13,6 +13,14 @@ class SearchViewController: UIViewController {
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
         //
+    @IBOutlet weak var segmentedControl: UISegmentedControl!
+    @IBAction func segmentChaged(_ sender: UISegmentedControl) {
+        print("Segment changed: \( sender.selectedSegmentIndex )")
+        //
+        performSearch()
+        //
+    }
+    //
     var searchResults = [SearchResult]()
     var hasSearched = false
     var isLoading = false
@@ -33,7 +41,7 @@ class SearchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         searchBar.becomeFirstResponder()
-        self.tableView.contentInset = UIEdgeInsets(top: 50, left: 0, bottom: 0, right: 0)
+        self.tableView.contentInset = UIEdgeInsets(top: 94, left: 0, bottom: 0, right: 0)
         self.searchBar.backgroundColor = UIColor.blue
         //
         var cellNib = UINib(nibName: TableView.CellIdentifier.searchResultCell, bundle: nil)
@@ -45,12 +53,9 @@ class SearchViewController: UIViewController {
         tableView.register(cellNib, forCellReuseIdentifier: TableView.CellIdentifier.loadingCell)
         //
     }
-}
-
-//MARK: - Search Bar Delegate
-extension SearchViewController : UISearchBarDelegate {
-    //
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+    
+    //MARK:- Helper Methods
+    func performSearch() {
         if !self.searchBar.text!.isEmpty {
             searchBar.resignFirstResponder()
             //MARK: - Configure - loading status
@@ -61,16 +66,16 @@ extension SearchViewController : UISearchBarDelegate {
             hasSearched = true
             searchResults = []
             //MARK: - Dispatch to Background Queue : let GCD handle the rest
-            let url = self.iTunesURL( searchText: searchBar.text! )
+            let url = self.iTunesURL( searchText: searchBar.text!, category: segmentedControl.selectedSegmentIndex )
             let session = URLSession.shared
-            //
-            dataTask = session.dataTask(with: url){ data,response, error in
-                                                                            // Data?, URLResponse?, Error?
+            // URLDataSession
+            dataTask = session.dataTask(with: url){ data,response, error in // Data?, URLResponse?, Error?
                 checkOnMain()
+                // MARK:- If the error is about, the task was cancelled before completion
                 if let error = error as NSError?, error.code == -999 {
                     return
                 }
-                // URLResponse -> HTTPURLResponse : URLResponse to access status code
+                //MARK:- Got an HTTPURLResponse
                 else if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 {
                         print("Request accepted!! data : \(data!)")
                     //MARK: - MARK:- Reflect the fetched data
@@ -85,12 +90,21 @@ extension SearchViewController : UISearchBarDelegate {
                         return
                     }
                 }
-                else { // If error is nil !!
-                    print("Failure in Networking \(response!)")
+                
+                //MARK:- no internet connection or didn't get 200 status http response
+                else {
+                    //
+                    if let response = response {
+                        print("Failure in Networking \(response)")
+                    }
+                    else{
+                        print("error : \( error?.localizedDescription ?? "No Internet Connection" )")
+                    }
+                    //
                 }
-                // MARK:- Unsuccessful networking
+                
+                // MARK:- Not on network or failed in loading data from server
                 DispatchQueue.main.async {
-                    //MARK:- Non heavy. Okay to do on main thread
                     checkOnMain()
                     self.hasSearched = false
                     self.isLoading = false
@@ -103,27 +117,25 @@ extension SearchViewController : UISearchBarDelegate {
             
             dataTask?.resume()
         }
-        //MARK:- End of searchBarButtonClicked( )
-    }
-    
-    // 2. SearchBarDelegate : UIBarPositioning(protocol)
-    func position(for bar: UIBarPositioning) -> UIBarPosition {
-        return .topAttached
     }
     
     //MARK:- Helper Method
-    func iTunesURL(searchText : String) -> URL {
+    func iTunesURL(searchText : String, category: Int) -> URL {
+        //
+        let kind : String
+        switch category {
+            case 1: kind = "musicTrack"
+            case 2: kind = "software"
+            case 3: kind = "ebook"
+            default: kind = ""
+        }
         let encodeText = searchText.addingPercentEncoding( withAllowedCharacters: CharacterSet.urlQueryAllowed )!
-        let urlString = String(
-            //MARK:- itunes API Endpoint
-            format : "https://itunes.apple.com/search?term=%@&limit=200",
-            encodeText
-        )
+        let urlString = "https://itunes.apple.com/search?term=\(encodeText)&limit=200&entity=\(kind)"
+        //
             let url = URL(string: urlString)
             return url!
-        }
+    }
     
-    //
     func parse(data: Data) -> [SearchResult] {
         do {
             let decoder = JSONDecoder()
@@ -143,7 +155,20 @@ extension SearchViewController : UISearchBarDelegate {
         //
         present(alert, animated: true, completion: nil)
     }
+    
+    //
+}
 
+//MARK: - Search Bar Delegate
+extension SearchViewController : UISearchBarDelegate {
+    //
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        performSearch()
+    }
+    //
+    func position(for bar: UIBarPositioning) -> UIBarPosition {
+        return .topAttached
+    }
     //MARK:- End of VC.
 }
 
