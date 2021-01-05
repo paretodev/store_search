@@ -12,15 +12,11 @@ class SearchViewController: UIViewController {
         //
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
-        //
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     @IBAction func segmentChaged(_ sender: UISegmentedControl) {
         print("Segment changed: \( sender.selectedSegmentIndex )")
-        //
         performSearch()
-        //
     }
-    //
     var searchResults = [SearchResult]()
     var hasSearched = false
     var isLoading = false
@@ -225,6 +221,18 @@ extension SearchViewController : UISearchBarDelegate {
         // 4).
         func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
             tableView.deselectRow(at: indexPath, animated: true)
+            //
+            performSegue(withIdentifier: "ShowDetail", sender: indexPath) // sender -> given as selected cell's section and row
+            //
+        }
+        
+        //MARK:- Navigation
+        override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+            //
+            if segue.identifier == "ShowDetail" {
+                ( segue.destination as! DetailViewController ).searchResult = searchResults[ ( sender as! IndexPath ).row ]
+            }
+            //
         }
         
         // MARK: - End of vc.

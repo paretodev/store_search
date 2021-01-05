@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		1C11040E259DE5FD0099AC45 /* UIImageView+DownloadingImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C11040D259DE5FD0099AC45 /* UIImageView+DownloadingImage.swift */; };
 		1C1A3A52259D965E0088680D /* UniversalGadgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C1A3A51259D965E0088680D /* UniversalGadgets.swift */; };
+		1C4763D825A33CB30001E2F6 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C4763D725A33CB30001E2F6 /* DetailViewController.swift */; };
 		1C5EE35F259645E800AD4AE5 /* NothingFoundCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1C5EE35E259645E800AD4AE5 /* NothingFoundCell.xib */; };
 		1CB761EC259B2409003F1FF6 /* LoadingCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1CB761EB259B2409003F1FF6 /* LoadingCell.xib */; };
 		1CC7BAC32594A7B600887E65 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC7BAC22594A7B600887E65 /* AppDelegate.swift */; };
@@ -24,6 +25,7 @@
 /* Begin PBXFileReference section */
 		1C11040D259DE5FD0099AC45 /* UIImageView+DownloadingImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+DownloadingImage.swift"; sourceTree = "<group>"; };
 		1C1A3A51259D965E0088680D /* UniversalGadgets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UniversalGadgets.swift; sourceTree = "<group>"; };
+		1C4763D725A33CB30001E2F6 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		1C5EE35E259645E800AD4AE5 /* NothingFoundCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NothingFoundCell.xib; sourceTree = "<group>"; };
 		1CB761EB259B2409003F1FF6 /* LoadingCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LoadingCell.xib; sourceTree = "<group>"; };
 		1CC7BABF2594A7B600887E65 /* storesearch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = storesearch.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -61,6 +63,7 @@
 			isa = PBXGroup;
 			children = (
 				1CC7BAC62594A7B600887E65 /* SearchViewController.swift */,
+				1C4763D725A33CB30001E2F6 /* DetailViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -196,6 +199,7 @@
 				1CC7BAC52594A7B600887E65 /* SceneDelegate.swift in Sources */,
 				1CFDB70A2596160A001DD27A /* SearchResultCell.swift in Sources */,
 				1C1A3A52259D965E0088680D /* UniversalGadgets.swift in Sources */,
+				1C4763D825A33CB30001E2F6 /* DetailViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
