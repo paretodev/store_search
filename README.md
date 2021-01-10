@@ -1,7 +1,6 @@
 # iTunes Store Searcher
 
 <br>
-
 &nbsp;&nbsp;iTunes에 올라와 있는, 음악, 앱, 팟캐스트에 대한 종합적인 검색을 하여 링크해주는 앱.<br><br>
 
 ![](./images/1.gif)
