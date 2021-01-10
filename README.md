@@ -30,7 +30,7 @@
       - [Alamofire🔥 ( easy swift networking )(블로그 정리)](https://www.notion.so/fundamentaldeveloper/Alamofire-easy-swift-networking-30f2a30ada574d84a49a3dcc02e1b216)
 
    3. [⛅️ Modal View Presentation Style(블로그 정리)](https://www.notion.so/fundamentaldeveloper/Modal-View-Presentation-Style-57c39800fd8b49879429a2306f396b8a)
-   4. [🙋‍♂️🙋‍♀️🙋 UIView Set Up Process(블로그 정리)](https://www.notion.so/fundamentaldeveloper/UIView-Set-Up-Process-a89c27a597f4466fae52c8091d047312)
+   4. [🙋‍♂️🙋‍♀️🙋 ViewController's uiviews Set Up Process](https://www.notion.so/fundamentaldeveloper/ViewController-s-uiviews-Set-Up-Process-a89c27a597f4466fae52c8091d047312)
    5. [Image Slicing for Button 🛒 ft. Using Image as a template image(color)(블로그 정리)](https://www.notion.so/fundamentaldeveloper/1-Image-Slicing-for-Button-ft-Using-Image-as-a-template-image-color-ebbca4f0fa184af183d760e227906ee7)
    6. [How To Set Activated Touch Source View For() Tap Gesture Recognizer(블로그 정리)](https://www.notion.so/fundamentaldeveloper/3-How-To-Use-Tap-Gesture-Recognizer-c2ae91b8b744451f97d9ed305277ae32)
    7. [weak capture 📸 self, sometimes download task completion handler must not keep VC instance from dying ☠️ (블로그 정리)](https://www.notion.so/fundamentaldeveloper/6-weak-capture-self-download-task-completion-handler-can-t-keep-VC-from-dying-f075edc6e06f473590565e69902bdb0e)
